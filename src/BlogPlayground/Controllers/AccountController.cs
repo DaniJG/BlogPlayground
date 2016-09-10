@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using BlogPlayground.Models;
 using BlogPlayground.Models.AccountViewModels;
 using BlogPlayground.Services;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace BlogPlayground.Controllers
 {
@@ -22,19 +24,22 @@ namespace BlogPlayground.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly IGooglePictureLocator _pictureLocator;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+        IGooglePictureLocator pictureLocator)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _pictureLocator = pictureLocator;
         }
 
         //
@@ -207,8 +212,11 @@ namespace BlogPlayground.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = info.Principal.FindFirstValue(ClaimTypes.Name) };              
+                user.Picture = await _pictureLocator.GetProfilePictureAsync(info);
                 var result = await _userManager.CreateAsync(user);
+
                 if (result.Succeeded)
                 {
                     result = await _userManager.AddLoginAsync(user, info);

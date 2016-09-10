@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using BlogPlayground.Models;
 using BlogPlayground.Models.ManageViewModels;
 using BlogPlayground.Services;
+using System.Security.Claims;
 
 namespace BlogPlayground.Controllers
 {
@@ -20,19 +21,22 @@ namespace BlogPlayground.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly IGooglePictureLocator _pictureLocator;
 
         public ManageController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,
+        IGooglePictureLocator pictureLocator)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _pictureLocator = pictureLocator;
         }
 
         //
@@ -325,6 +329,12 @@ namespace BlogPlayground.Controllers
             }
             var result = await _userManager.AddLoginAsync(user, info);
             var message = result.Succeeded ? ManageMessageId.AddLoginSuccess : ManageMessageId.Error;
+
+            //Update user with information from his Google Profile
+            user.FullName = info.Principal.FindFirstValue(ClaimTypes.Name);
+            user.Picture = await _pictureLocator.GetProfilePictureAsync(info);
+            await _userManager.UpdateAsync(user);
+
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 

@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using BlogPlayground.Data;
 using BlogPlayground.Models;
 using BlogPlayground.Services;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using System.Security.Claims;
 
 namespace BlogPlayground
 {
@@ -53,6 +55,7 @@ namespace BlogPlayground
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<IGooglePictureLocator, GooglePictureLocator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,7 +86,8 @@ namespace BlogPlayground
                 //Note: for safe storage of secrets, read about the Secret Manager tool at: https://docs.asp.net/en/latest/security/app-secrets.html
                 ClientId = "385848052935-5c1o16iv1mkh2l7f3b71quc51emv31hg.apps.googleusercontent.com",
                 ClientSecret = "QF6jGOXTySiqADYXJtHK9iOI",
-                //SaveTokens = true    Is this needed? Seems to be in the aspnet/security socials sample: https://github.com/aspnet/Security/blob/dev/samples/SocialSample/Startup.cs
+                SaveTokens = true, // So we get the access token and can use it later to retrieve the user profile including its picture
+                //CallbackPath = "/signin-google",   DEFAULT VALUE                
             });
 
             app.UseMvc(routes =>
