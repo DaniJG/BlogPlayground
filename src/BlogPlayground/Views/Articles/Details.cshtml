@@ -1,0 +1,30 @@
+@model BlogPlayground.Models.Article
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div>
+    <h4>Model.Title</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Abstract)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Abstract)
+        </dd>   
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+    </dl>
+    <p>
+        @Html.DisplayFor(model => model.Contents)
+    </p>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
