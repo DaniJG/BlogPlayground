@@ -41,6 +41,15 @@ textarea {
     width: 100%;
 }
 
+/*Profile picture*/
+.profile-picture img{
+    vertical-align: middle;
+    border-radius: 50%;
+}
+.navbar .profile-picture {
+    line-height: 50px;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
   /* Hide captions */

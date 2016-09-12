@@ -5,7 +5,9 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
-{
+{     
+    var userProfile = await UserManager.GetUserAsync(User);    
+    
     <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
@@ -13,6 +15,9 @@
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
+            </li>            
+            <li>
+                <profile-picture profile="@userProfile" size-px="40" />
             </li>
         </ul>
     </form>

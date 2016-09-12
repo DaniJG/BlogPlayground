@@ -214,7 +214,7 @@ namespace BlogPlayground.Controllers
                 }
 
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = info.Principal.FindFirstValue(ClaimTypes.Name) };              
-                user.Picture = await _pictureLocator.GetProfilePictureAsync(info);
+                user.PictureUrl = await _pictureLocator.GetProfilePictureAsync(info);
                 var result = await _userManager.CreateAsync(user);
 
                 if (result.Succeeded)

@@ -332,7 +332,7 @@ namespace BlogPlayground.Controllers
 
             //Update user with information from his Google Profile
             user.FullName = info.Principal.FindFirstValue(ClaimTypes.Name);
-            user.Picture = await _pictureLocator.GetProfilePictureAsync(info);
+            user.PictureUrl = await _pictureLocator.GetProfilePictureAsync(info);
             await _userManager.UpdateAsync(user);
 
             return RedirectToAction(nameof(ManageLogins), new { Message = message });

@@ -14,7 +14,7 @@ namespace BlogPlayground.Data.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "Picture",
+                name: "PictureUrl",
                 table: "AspNetUsers",
                 nullable: true);
         }
@@ -26,7 +26,7 @@ namespace BlogPlayground.Data.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "Picture",
+                name: "PictureUrl",
                 table: "AspNetUsers");
         }
     }
