@@ -15,6 +15,8 @@ using BlogPlayground.Models;
 using BlogPlayground.Services;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BlogPlayground
 {
@@ -51,6 +53,9 @@ namespace BlogPlayground
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+
+            //Needed for accessing action context in the tag helpers
+            services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();

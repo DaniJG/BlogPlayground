@@ -1,6 +1,9 @@
 ﻿using BlogPlayground.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
@@ -11,18 +14,22 @@ namespace BlogPlayground.TagHelpers
 {
     public class ProfilePictureTagHelper : TagHelper
     {
+        private readonly IUrlHelperFactory urlHelperFactory;
+        private readonly IActionContextAccessor actionAccessor;
+
+        public ProfilePictureTagHelper(IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionAccessor)
+        {
+            this.urlHelperFactory = urlHelperFactory;
+            this.actionAccessor = actionAccessor;
+        }
+
         public ApplicationUser Profile { get; set; }
         public int? SizePx { get; set; }
+        private bool IsDefaultPicture => this.Profile == null || String.IsNullOrWhiteSpace(this.Profile.PictureUrl);
+        private IUrlHelper UrlHelper => this.urlHelperFactory.GetUrlHelper(this.actionAccessor.ActionContext);
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            //Render nothing if there is no profile or profile doesn't have a picture url
-            if (this.Profile == null || String.IsNullOrWhiteSpace(this.Profile.PictureUrl))
-            {
-                output.SuppressOutput();
-                return;
-            }
-            
             //add wrapper span with well known class
             output.TagName = "span";
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -30,13 +37,20 @@ namespace BlogPlayground.TagHelpers
 
             //Add inner img element
             var img = new TagBuilder("img");
-            var imgUri = new UriBuilder(this.Profile.PictureUrl);
             img.Attributes.Add("src", this.GetPictureUrl());
+            if (this.IsDefaultPicture && this.SizePx.HasValue) {
+                img.Attributes.Add("style", $"height:{this.SizePx.Value}px;width:{this.SizePx.Value}px");
+            }
             output.Content.SetHtmlContent(img);          
         }
 
         private string GetPictureUrl()
         {
+            if (this.IsDefaultPicture)
+            {
+                return this.UrlHelper.Content("~/images/placeholder.png");
+            }
+
             var imgUriBuilder = new UriBuilder(this.Profile.PictureUrl);
             if (this.SizePx.HasValue)
             {
