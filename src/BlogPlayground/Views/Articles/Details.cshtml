@@ -4,27 +4,58 @@
     ViewData["Title"] = Model.Title;
 }
 
-<div>
-    <h4>Model.Title</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Abstract)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Abstract)
-        </dd>   
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-    </dl>
-    <p>
-        @Html.DisplayFor(model => model.Contents)
-    </p>
+<div class="article-page container">
+    <div class="col-md-8">
+
+        <div class="row article-summary">
+            <div class="col-md-4">
+                <profile-picture profile="@Model.Author" size-px="40" />
+                <p class="text-center author-name">
+                    @(Model.Author.FullName ?? Model.Author.UserName ?? "Anonymous")
+                </p>
+                <p class="text-center">
+                    @Model.CreatedDate.ToString("dd MMM yyyy")
+                </p>
+            </div>
+            <div class="col-md-8">
+                <h4 class="row">
+                    <a asp-action="Details" asp-route-id="@Model.ArticleId">@Model.Title</a>
+                </h4>
+                <blockquote>
+                    <p>@Model.Abstract</p>
+                </blockquote>
+            </div>
+        </div>
+        <hr />
+        <p>
+            @Model.Contents
+        </p>
+
+    </div>
+
+    @*<div class="col-md-4">
+        <div class="btn-group-vertical" role="group">
+            <a asp-action="Create" class="pull-right btn btn-default">Write a new Article</a>
+            <a asp-action="Index" class="pull-right btn btn-default">Back to List</a>
+            <a asp-action="Delete" asp-route-id="@Model.ArticleId" class="pull-right btn btn-danger">Delete</a>
+        </div>
+    </div>*@
+
+    <div class="col-md-4">
+        <div class="btn-group">
+            <a asp-action="Create" class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Write a new Article
+            </a>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a asp-action="Index">Back to List</a></li>
+                <li><a asp-action="Delete" asp-route-id="@Model.ArticleId">Delete</a></li>
+            </ul>
+        </div>
+    </div>
+
 </div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+

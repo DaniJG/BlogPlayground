@@ -45,8 +45,32 @@ select {
     vertical-align: middle;
     border-radius: 50%;
 }
+
+/*Navbar*/
 .navbar .profile-picture {
     line-height: 50px;
+}
+
+/*Article list*/
+.article-list{
+    margin-top: 10px;
+}
+
+.article-summary .profile-picture img{
+    display: block;
+    margin: 0 auto;
+}
+
+.article-summary .col-md-4{
+    margin-top: 5px;
+}
+
+.article-summary .author-name{
+    margin: 10px 0 0 0;
+}
+
+.article-page{
+    margin-top: 20px;
 }
 
 /* Hide/rearrange for smaller screens */

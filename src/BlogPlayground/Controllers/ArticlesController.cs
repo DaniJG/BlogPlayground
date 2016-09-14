@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BlogPlayground.Data;
 using BlogPlayground.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogPlayground.Controllers
 {
@@ -49,6 +50,7 @@ namespace BlogPlayground.Controllers
         }
 
         // GET: Articles/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -59,6 +61,7 @@ namespace BlogPlayground.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Title, Abstract,Contents")] Article article)
         {
             if (ModelState.IsValid)
@@ -70,9 +73,10 @@ namespace BlogPlayground.Controllers
                 return RedirectToAction("Index");
             }
             return View(article);
-        }        
+        }
 
         // GET: Articles/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -92,6 +96,7 @@ namespace BlogPlayground.Controllers
         // POST: Articles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var article = await _context.Article.SingleOrDefaultAsync(m => m.ArticleId == id);

@@ -37,11 +37,22 @@ namespace BlogPlayground.TagHelpers
 
             //Add inner img element
             var img = new TagBuilder("img");
+            img.TagRenderMode = TagRenderMode.SelfClosing;            
+            img.Attributes.Add("title", this.GetAlternateText());
             img.Attributes.Add("src", this.GetPictureUrl());
             if (this.IsDefaultPicture && this.SizePx.HasValue) {
                 img.Attributes.Add("style", $"height:{this.SizePx.Value}px;width:{this.SizePx.Value}px");
             }
             output.Content.SetHtmlContent(img);          
+        }
+
+        private string GetAlternateText()
+        {
+            if (this.Profile == null)
+            {
+                return "Anonymous";
+            }
+            return this.Profile.FullName ?? this.Profile.UserName;
         }
 
         private string GetPictureUrl()
