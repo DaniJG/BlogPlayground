@@ -8,9 +8,7 @@
     <div class="col-md-8">
         @Html.Partial("_ArticleSummary", Model)
         <hr />
-        <p>
-            @Model.Contents
-        </p>
+        <markdown source="@Model.Contents"></markdown>
     </div>
 
     <div class="col-md-4">
