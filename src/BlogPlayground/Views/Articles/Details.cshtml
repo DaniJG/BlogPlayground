@@ -5,25 +5,32 @@
 }
 
 <div class="article-page container">
-    <div class="col-md-8">
+    <div class="col-md-8 article-details">
         @Html.Partial("_ArticleSummary", Model)
         <hr />
         <markdown source="@Model.Contents"></markdown>
     </div>
 
     <div class="col-md-4">
-        <div class="btn-group">
-            <a asp-action="Create" class="btn btn-primary">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Write a new Article
-            </a>
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a asp-action="Index">Back to List</a></li>
-                <li><a asp-action="Delete" asp-route-id="@Model.ArticleId">Delete</a></li>
-            </ul>
+        <div class="container-fluid sidebar">
+            <div class="row">
+                <div class="btn-group">
+                    <a asp-action="Create" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Write a new Article
+                    </a>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a asp-action="Index">Back to List</a></li>
+                        <li><a asp-action="Delete" asp-route-id="@Model.ArticleId">Delete</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                @await Component.InvokeAsync("LastArticles", new { howMany = 2 })
+            </div>
         </div>
     </div>
 

@@ -51,11 +51,7 @@ select {
     line-height: 50px;
 }
 
-/*Article list*/
-.article-list{
-    margin-top: 10px;
-}
-
+/*Articles*/
 .article-summary .profile-picture img{
     display: block;
     margin: 0 auto;
@@ -69,8 +65,26 @@ select {
     margin: 10px 0 0 0;
 }
 
+.article-list{
+    margin-top: 10px;
+}
+
+.article-list,
+.article-details {
+    border-right: 1px solid #eee;
+}
+
 .article-page{
     margin-top: 20px;
+}
+
+.last-articles {
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.last-articles-list blockquote {
+    font-size: 14px;
 }
 
 /* Hide/rearrange for smaller screens */

@@ -16,10 +16,17 @@
     }
     </ul>
 
-    <div class="col-md-4 article-sidebar">
-        <a asp-action="Create" class="btn btn-primary">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Write a new Article
-        </a>
+    <div class="col-md-4">
+        <div class="container-fluid sidebar">
+            <div class="row">
+                <a asp-action="Create" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Write a new Article
+                </a>
+            </div>
+            <div class="row">
+                @await Component.InvokeAsync("LastArticles", new { howMany = 2 })
+            </div>
+        </div>
     </div>
 
 </div>

@@ -1,0 +1,14 @@
+@model IEnumerable<BlogPlayground.Models.Article>
+
+<div class="last-articles">
+    <h4>Latest articles:</h4>
+    <ul class="list-unstyled last-articles-list">
+        @foreach (var article in Model)
+        {
+            <li>
+                @Html.Partial("_ArticleSummary", article)
+            </li>
+        }
+    </ul>
+</div>
+
