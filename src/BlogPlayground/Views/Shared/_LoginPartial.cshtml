@@ -9,7 +9,7 @@
     var userProfile = await UserManager.GetUserAsync(User);    
     
     <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav pull-right">
             <li>
                 <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @(String.IsNullOrWhiteSpace(userProfile.FullName) ? userProfile.UserName : userProfile.FullName)!</a>
             </li>
