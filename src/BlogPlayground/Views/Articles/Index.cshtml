@@ -4,34 +4,16 @@
     ViewData["Title"] = "Articles";
 }
 
-<h3>This is what we have been doing...</h3>
+<h3>This is what we have been writing...</h3>
 
 <div class="container">
     <ul class="col-md-8 list-unstyled article-list">
-        @foreach (var article in Model)
-        {
-            <li>
-                <div class="row article-summary">
-                    <div class="col-md-4">
-                        <profile-picture profile="@article.Author" size-px="40" />
-                        <p class="text-center author-name">
-                            @(article.Author.FullName ?? article.Author.UserName ?? "Anonymous")
-                        </p>
-                        <p class="text-center">
-                            @article.CreatedDate.ToString("dd MMM yyyy")
-                        </p>
-                    </div>
-                    <div class="col-md-8">
-                        <h4 class="row">
-                            <a asp-action="Details" asp-route-id="@article.ArticleId">@article.Title</a>
-                        </h4>
-                        <blockquote>
-                            <p>@article.Abstract</p>
-                        </blockquote>
-                    </div>
-                </div>
-            </li>
-        }
+    @foreach (var article in Model)
+    {
+        <li>
+            @Html.Partial("_ArticleSummary", article)
+        </li>
+    }
     </ul>
 
     <div class="col-md-4 article-sidebar">

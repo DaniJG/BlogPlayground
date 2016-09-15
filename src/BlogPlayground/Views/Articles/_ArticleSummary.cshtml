@@ -1,0 +1,21 @@
+@model BlogPlayground.Models.Article
+
+<div class="row article-summary">
+    <div class="col-md-4">
+        <profile-picture profile="@Model.Author" size-px="40" />
+        <p class="text-center author-name">
+            @(Model.Author.FullName ?? Model.Author.UserName ?? "Anonymous")
+        </p>
+        <p class="text-center">
+            @Model.CreatedDate.ToString("dd MMM yyyy")
+        </p>
+    </div>
+    <div class="col-md-8">
+        <h4 class="row">
+            <a asp-action="Details" asp-route-id="@Model.ArticleId">@Model.Title</a>
+        </h4>
+        <blockquote>
+            <p>@Model.Abstract</p>
+        </blockquote>
+    </div>
+</div>
