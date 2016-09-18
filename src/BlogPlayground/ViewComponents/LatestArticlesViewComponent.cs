@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace BlogPlayground.ViewComponents
 {
-    public class LastArticlesViewComponent: ViewComponent
+    public class LatestArticlesViewComponent: ViewComponent
     {
         private readonly ApplicationDbContext _context;
 
-        public LastArticlesViewComponent(ApplicationDbContext context)
+        public LatestArticlesViewComponent(ApplicationDbContext context)
         {
             _context = context;
         }

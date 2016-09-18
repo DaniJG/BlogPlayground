@@ -4,7 +4,7 @@
     <div class="col-md-4">
         <profile-picture profile="@Model.Author" size-px="40" />
         <p class="text-center author-name">
-            @(Model.Author.FullName ?? Model.Author.UserName ?? "Anonymous")
+            @(Model.Author.FullName ?? Model.Author.UserName)
         </p>
         <p class="text-center">
             @Model.CreatedDate.ToString("dd MMM yyyy")

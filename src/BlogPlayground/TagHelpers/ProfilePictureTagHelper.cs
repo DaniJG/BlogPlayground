@@ -25,11 +25,17 @@ namespace BlogPlayground.TagHelpers
 
         public ApplicationUser Profile { get; set; }
         public int? SizePx { get; set; }
-        private bool IsDefaultPicture => this.Profile == null || String.IsNullOrWhiteSpace(this.Profile.PictureUrl);
+        private bool IsDefaultPicture =>  String.IsNullOrWhiteSpace(this.Profile.PictureUrl);
         private IUrlHelper UrlHelper => this.urlHelperFactory.GetUrlHelper(this.actionAccessor.ActionContext);
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            if (this.Profile == null)
+            {
+                output.SuppressOutput();
+                return;
+            }
+
             //add wrapper span with well known class
             output.TagName = "span";
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -47,11 +53,7 @@ namespace BlogPlayground.TagHelpers
         }
 
         private string GetAlternateText()
-        {
-            if (this.Profile == null)
-            {
-                return "Anonymous";
-            }
+        {            
             return this.Profile.FullName ?? this.Profile.UserName;
         }
 
