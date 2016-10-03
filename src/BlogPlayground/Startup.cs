@@ -89,8 +89,8 @@ namespace BlogPlayground
             app.UseGoogleAuthentication(new GoogleOptions
             {
                 //Note: for safe storage of secrets, read about the Secret Manager tool at: https://docs.asp.net/en/latest/security/app-secrets.html
-                ClientId = Configuration["GoogleClientId"],
-                ClientSecret = Configuration["GoogleClientSecret"],
+                ClientId = Configuration["GoogleClientId"] ?? "MissingClientId",
+                ClientSecret = Configuration["GoogleClientSecret"] ?? "MissingClientSecret",
                 SaveTokens = true, // So we get the access token and can use it later to retrieve the user profile including its picture
                 //CallbackPath = "/signin-google",   DEFAULT VALUE                
             });
