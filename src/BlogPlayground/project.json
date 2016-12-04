@@ -32,11 +32,14 @@
     "Microsoft.AspNetCore.Mvc": "1.1.0",
     "Microsoft.AspNetCore.Razor.Tools": "1.1.0-preview4-final",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
-    "Microsoft.Extensions.SecretManager.Tools": "1.1.0-preview4-final"
+    "Microsoft.Extensions.SecretManager.Tools": "1.1.0-preview4-final",
+    "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Design": "1.1.0-preview4-final",
+    "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools": "1.1.0-preview4-final"
   },
 
   "tools": {
-    "Microsoft.EntityFrameworkCore.Tools": "1.0.0-preview2-final"
+    "Microsoft.EntityFrameworkCore.Tools": "1.0.0-preview2-final",
+    "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools": "1.1.0-preview4-final"
   },
 
   "frameworks": {
@@ -70,7 +73,12 @@
   },
 
   "scripts": {
+    //Uncomment just to see the views precompilation output when building locally
+    //"postcompile": [ "dotnet razor-precompile -o %project:Directory%\\bin\\temp %project:Directory%" ],
     "prepublish": [ "bower install", "dotnet bundle" ],
-    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+    "postpublish": [
+      "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%",
+      "dotnet razor-precompile --configuration %publish:Configuration% --framework %publish:TargetFramework% --output-path %publish:OutputPath% %publish:ProjectPath%"
+    ]
   }
 }
