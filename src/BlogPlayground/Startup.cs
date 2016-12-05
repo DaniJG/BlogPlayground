@@ -53,6 +53,7 @@ namespace BlogPlayground
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+            services.AddResponseCompression();
 
             //Needed for accessing action context in the tag helpers
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -80,9 +81,8 @@ namespace BlogPlayground
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            
+            app.UseResponseCompression();
             app.UseStaticFiles();
-
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715

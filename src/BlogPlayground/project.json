@@ -34,7 +34,8 @@
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
     "Microsoft.Extensions.SecretManager.Tools": "1.1.0-preview4-final",
     "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Design": "1.1.0-preview4-final",
-    "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools": "1.1.0-preview4-final"
+    "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools": "1.1.0-preview4-final",
+    "Microsoft.AspNetCore.ResponseCompression": "1.0.0"
   },
 
   "tools": {
