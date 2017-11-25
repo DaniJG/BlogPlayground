@@ -4,42 +4,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using BlogPlayground.Data;
 using BlogPlayground.Models;
 using BlogPlayground.Services;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BlogPlayground
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -51,6 +36,15 @@ namespace BlogPlayground
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication()
+                .AddGoogle(options => 
+                {
+                    options.ClientId = Configuration["GoogleClientId"] ?? "MissingClientId";
+                    options.ClientSecret = Configuration["GoogleClientSecret"] ?? "MissingClientSecret";
+                    options.SaveTokens = true; // So we get the access token and can use it later to retrieve the user profile including its picture
+                    //options.CallbackPath = "/signin-google" DEFAULT VALUE
+                }); 
 
             services.AddMvc();
             services.AddResponseCompression();
@@ -83,17 +77,7 @@ namespace BlogPlayground
 
             app.UseResponseCompression();
             app.UseStaticFiles();
-            app.UseIdentity();
-
-            // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
-            app.UseGoogleAuthentication(new GoogleOptions
-            {
-                //Note: for safe storage of secrets, read about the Secret Manager tool at: https://docs.asp.net/en/latest/security/app-secrets.html
-                ClientId = Configuration["GoogleClientId"] ?? "MissingClientId",
-                ClientSecret = Configuration["GoogleClientSecret"] ?? "MissingClientSecret",
-                SaveTokens = true, // So we get the access token and can use it later to retrieve the user profile including its picture
-                //CallbackPath = "/signin-google",   DEFAULT VALUE                
-            });
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

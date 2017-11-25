@@ -44,9 +44,9 @@
     <form asp-controller="Manage" asp-action="LinkLogin" method="post" class="form-horizontal">
         <div id="socialLoginList">
             <p>
-                @foreach (var provider in Model.OtherLogins)
+                @foreach (var scheme in Model.OtherLogins)
                 {
-                    <button type="submit" class="btn btn-default" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
+                    <button type="submit" class="btn btn-default" name="provider" value="@scheme.Name" title="Log in using your @scheme.DisplayName account">@scheme.Name</button>
                 }
             </p>
         </div>
