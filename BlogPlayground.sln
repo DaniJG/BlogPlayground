@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7CFDF67D-EAA6-4E28-820E-1B7A39886180}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BC2A7FA-1DF5-4B8D-8A90-54EC4BE82E8E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogPlayground", "src\BlogPlayground\BlogPlayground.csproj", "{0723636E-4E08-41FA-AF4A-5A0FF9EFD926}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogPlayground", "BlogPlayground\BlogPlayground.csproj", "{0723636E-4E08-41FA-AF4A-5A0FF9EFD926}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
