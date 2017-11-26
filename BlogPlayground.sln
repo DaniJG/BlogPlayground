@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogPlayground", "BlogPlayground\BlogPlayground.csproj", "{0723636E-4E08-41FA-AF4A-5A0FF9EFD926}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogPlayground.Test", "BlogPlayground.Test\BlogPlayground.Test.csproj", "{B2C5E0EA-80B2-4128-B67F-0CBFB0D9BB1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,12 +17,13 @@ Global
 		{0723636E-4E08-41FA-AF4A-5A0FF9EFD926}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0723636E-4E08-41FA-AF4A-5A0FF9EFD926}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0723636E-4E08-41FA-AF4A-5A0FF9EFD926}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2C5E0EA-80B2-4128-B67F-0CBFB0D9BB1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2C5E0EA-80B2-4128-B67F-0CBFB0D9BB1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2C5E0EA-80B2-4128-B67F-0CBFB0D9BB1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2C5E0EA-80B2-4128-B67F-0CBFB0D9BB1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{0723636E-4E08-41FA-AF4A-5A0FF9EFD926} = {7CFDF67D-EAA6-4E28-820E-1B7A39886180}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1572A51A-994A-4748-917D-95D14E2C6194}
