@@ -10,7 +10,7 @@
     <ul class="col-md-8 list-unstyled article-list">
     @foreach (var article in Model)
     {
-        <li>
+        <li data-articleid="@article.ArticleId">
             @Html.Partial("_ArticleSummary", article)
         </li>
     }

@@ -9,6 +9,7 @@ namespace BlogPlayground.Data
     public interface IArticlesRepository
     {
         Task<List<Article>> GetAll();
+        Task<List<Article>> GetLatest(int num);
         Task<Article> GetOne(int id);
         void Add(Article article);
         void Remove(Article article);
