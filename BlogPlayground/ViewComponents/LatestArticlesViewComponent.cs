@@ -10,20 +10,16 @@ namespace BlogPlayground.ViewComponents
 {
     public class LatestArticlesViewComponent: ViewComponent
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IArticlesRepository _repository;
 
-        public LatestArticlesViewComponent(ApplicationDbContext context)
+        public LatestArticlesViewComponent(IArticlesRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(int howMany = 2)
         {
-            var lastArticles = await _context.Article
-                                            .OrderByDescending(a => a.CreatedDate)
-                                            .Take(howMany)
-                                            .ToListAsync();
-            return View(lastArticles);
+            return View(await _repository.GetLatest(howMany));
         }
     }
 }

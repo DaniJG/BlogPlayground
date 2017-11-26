@@ -19,6 +19,9 @@ namespace BlogPlayground.Data
         public Task<List<Article>> GetAll() =>
             _context.Article.Include(a => a.Author).ToListAsync();
 
+        public Task<List<Article>> GetLatest(int num) =>
+            _context.Article.Include(a => a.Author).OrderByDescending(a => a.CreatedDate).Take(num).ToListAsync();
+
         public Task<Article> GetOne(int id) =>
              _context.Article.Include(a => a.Author).SingleOrDefaultAsync(m => m.ArticleId == id);
 
