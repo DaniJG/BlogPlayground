@@ -9,25 +9,25 @@ using BlogPlayground.Data;
 using BlogPlayground.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using BlogPlayground.Services;
 
 namespace BlogPlayground.Controllers
 {
     public class ArticlesController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IArticlesRepository _articlesRepository;
+        private readonly IRequestUserProvider _requestUserProvider;
 
-        public ArticlesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ArticlesController(IArticlesRepository articlesRepository, IRequestUserProvider requestUserProvider)
         {
-            _context = context;
-            _userManager = userManager;
+            _articlesRepository = articlesRepository;
+            _requestUserProvider = requestUserProvider;
         }
 
         // GET: Articles
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Article.Include(a => a.Author);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _articlesRepository.GetAll());
         }
 
         // GET: Articles/Details/5
@@ -38,9 +38,7 @@ namespace BlogPlayground.Controllers
                 return NotFound();
             }
 
-            var article = await _context.Article
-                                        .Include(a => a.Author)
-                                        .SingleOrDefaultAsync(m => m.ArticleId == id);
+            var article = await _articlesRepository.GetOne(id.Value);
             if (article == null)
             {
                 return NotFound();
@@ -66,10 +64,10 @@ namespace BlogPlayground.Controllers
         {
             if (ModelState.IsValid)
             {
-                article.AuthorId = _userManager.GetUserId(this.User);
+                article.AuthorId = _requestUserProvider.GetUserId();
                 article.CreatedDate = DateTime.Now;
-                _context.Add(article);
-                await _context.SaveChangesAsync();
+                _articlesRepository.Add(article);
+                await _articlesRepository.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(article);
@@ -84,7 +82,7 @@ namespace BlogPlayground.Controllers
                 return NotFound();
             }
 
-            var article = await _context.Article.SingleOrDefaultAsync(m => m.ArticleId == id);
+            var article = await _articlesRepository.GetOne(id.Value);
             if (article == null)
             {
                 return NotFound();
@@ -99,9 +97,9 @@ namespace BlogPlayground.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var article = await _context.Article.SingleOrDefaultAsync(m => m.ArticleId == id);
-            _context.Article.Remove(article);
-            await _context.SaveChangesAsync();
+            var article = await _articlesRepository.GetOne(id);
+            _articlesRepository.Remove(article);
+            await _articlesRepository.SaveChanges();
             return RedirectToAction("Index");
         }
     }

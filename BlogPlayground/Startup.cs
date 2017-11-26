@@ -52,10 +52,14 @@ namespace BlogPlayground
             //Needed for accessing action context in the tag helpers
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
+            // Add application repositories as scoped dependencies so they are shared per every request.
+            services.AddScoped<IArticlesRepository, ArticlesRepository>();
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<IGooglePictureLocator, GooglePictureLocator>();
+            services.AddTransient<IRequestUserProvider, RequestUserProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
