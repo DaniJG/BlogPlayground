@@ -4,29 +4,28 @@ using Moq;
 using BlogPlayground.Data;
 using BlogPlayground.Services;
 using BlogPlayground.Controllers;
-using System.Collections.Generic;
 using BlogPlayground.Models;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BlogPlayground.Test
 {
-    public class ArticlesControllerTest
+    public class ArticlesApiControllerTest
     {
         private Mock<IArticlesRepository> articlesRepoMock;
         private Mock<IRequestUserProvider> requestUserProviderMock;
-        private ArticlesController controller;
+        private ArticlesApiController controller;
 
-        public ArticlesControllerTest()
+        public ArticlesApiControllerTest()
         {
             articlesRepoMock = new Mock<IArticlesRepository>();
             requestUserProviderMock = new Mock<IRequestUserProvider>();
-            controller = new ArticlesController(articlesRepoMock.Object, requestUserProviderMock.Object);
+            controller = new ArticlesApiController(articlesRepoMock.Object, requestUserProviderMock.Object);
         }
 
         [Fact]
-        public async Task IndexTest_ReturnsViewWithArticlesList()
+        public async Task GetArticlesTest_RetursArticlesList()
         {
             // Arrange
             var mockArticlesList = new List<Article>
@@ -37,40 +36,28 @@ namespace BlogPlayground.Test
             articlesRepoMock.Setup(repo => repo.GetAll()).Returns(Task.FromResult(mockArticlesList));            
 
             // Act
-            var result = await controller.Index();
+            var result = await controller.GetArticles();
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<IEnumerable<Article>>(viewResult.ViewData.Model);
-            Assert.Equal(2, model.Count());
+            Assert.Equal(mockArticlesList, result);
         }
 
         [Fact]
-        public async Task DetailsTest_ReturnsNotFound_WhenNoIdProvided()
-        {
-            // Act
-            var result = await controller.Details(null);
-
-            // Assert
-            var viewResult = Assert.IsType<NotFoundResult>(result);
-        }
-
-        [Fact]
-        public async Task DetailsTest_ReturnsNotFound_WhenArticleDoesNorExists()
+        public async Task GetArticleTest_ReturnsNotFound_WhenArticleDoesNorExists()
         {
             // Arrange
             var mockId = 42;
             articlesRepoMock.Setup(repo => repo.GetOne(mockId)).Returns(Task.FromResult<Article>(null));
 
             // Act
-            var result = await controller.Details(mockId);
+            var result = await controller.GetArticle(mockId);
 
             // Assert
             var viewResult = Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
-        public async Task DetailsTest_ReturnsDetailsView_WhenArticleExists()
+        public async Task GetArticleTest_ReturnsArticle_WhenArticleExists()
         {
             // Arrange
             var mockId = 42;
@@ -78,56 +65,46 @@ namespace BlogPlayground.Test
             articlesRepoMock.Setup(repo => repo.GetOne(mockId)).Returns(Task.FromResult(mockArticle));
 
             // Act
-            var result = await controller.Details(mockId);
+            var result = await controller.GetArticle(mockId);
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal(mockArticle, viewResult.ViewData.Model);
+            var actionResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(mockArticle, actionResult.Value);
         }
-
+        
         [Fact]
-        public void CreateTest_Get_ReturnsView()
-        {
-            // Act
-            var result = controller.Create();
-
-            // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-        }
-
-        [Fact]
-        public async Task CreateTest_Post_ReturnsCreateView_WhenModelStateIsInvalid()
+        public async Task AddArticleTest_ReturnsBadRequest_WhenModelStateIsInvalid()
         {
             // Arrange
             var mockArticle = new Article { Title = "mock article" };
             controller.ModelState.AddModelError("Description", "This field is required");
 
             // Act
-            var result = await controller.Create(mockArticle);
+            var result = await controller.AddArticle(mockArticle);
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal(mockArticle, viewResult.ViewData.Model);
+            var actionResult = Assert.IsType<BadRequestObjectResult>(result);
+            Assert.Equal(new SerializableError(controller.ModelState), actionResult.Value);
         }
 
         [Fact]
-        public async Task CreateTest_Post_AddsArticleToRepository_AndRedirectsToIndex()
+        public async Task AddArticleTest_ReturnsArticleSuccessfullyAdded()
         {
             // Arrange
             var mockArticle = new Article { Title = "mock article" };
             articlesRepoMock.Setup(repo => repo.SaveChanges()).Returns(Task.CompletedTask);
 
             // Act
-            var result = await controller.Create(mockArticle);
+            var result = await controller.AddArticle(mockArticle);
 
             // Assert
             articlesRepoMock.Verify(repo => repo.Add(mockArticle));
-            var viewResult = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Equal("Index", viewResult.ActionName);
+            var actionResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(mockArticle, actionResult.Value);
         }
 
         [Fact]
-        public async Task CreateTest_Post_SetsAuthorId_BeforeAddingArticleToRepository()
+        public async Task AddArticleTest_SetsAuthorId_BeforeAddingArticleToRepository()
         {
             // Arrange
             var mockArticle = new Article { Title = "mock article" };
@@ -136,7 +113,7 @@ namespace BlogPlayground.Test
             requestUserProviderMock.Setup(provider => provider.GetUserId()).Returns(mockAuthorId);
 
             // Act
-            var result = await controller.Create(mockArticle);
+            var result = await controller.AddArticle(mockArticle);
 
             // Assert
             articlesRepoMock.Verify(repo => 
@@ -146,7 +123,7 @@ namespace BlogPlayground.Test
         }
 
         [Fact]
-        public async Task CreateTest_Post_SetsCreatedDate_BeforeAddingArticleToRepository()
+        public async Task AddArticleTest_SetsCreatedDate_BeforeAddingArticleToRepository()
         {
             // Arrange
             var mockArticle = new Article { Title = "mock article" };
@@ -154,7 +131,7 @@ namespace BlogPlayground.Test
             articlesRepoMock.Setup(repo => repo.SaveChanges()).Returns(Task.CompletedTask);
 
             // Act
-            var result = await controller.Create(mockArticle);
+            var result = await controller.AddArticle(mockArticle);
             var endTime = DateTime.Now;
 
             // Assert
@@ -164,49 +141,23 @@ namespace BlogPlayground.Test
                     && article.CreatedDate >= startTime
                     && article.CreatedDate <= endTime)));
         }
-
+        
         [Fact]
-        public async Task DeleteTest_ReturnsNotFound_WhenNoIdProvided()
-        {
-            // Act
-            var result = await controller.Delete(null);
-
-            // Assert
-            var viewResult = Assert.IsType<NotFoundResult>(result);
-        }
-
-        [Fact]
-        public async Task DeleteTest_ReturnsNotFound_WhenArticleDoesNorExists()
+        public async Task DeleteArticleTest_ReturnsNotFound_WhenArticleDoesNorExists()
         {
             // Arrange
             var mockId = 42;
             articlesRepoMock.Setup(repo => repo.GetOne(mockId)).Returns(Task.FromResult<Article>(null));
 
             // Act
-            var result = await controller.Delete(mockId);
+            var result = await controller.DeleteArticle(mockId);
 
             // Assert
             var viewResult = Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
-        public async Task DeleteTest_ReturnsDeleteView_WhenArticleExists()
-        {
-            // Arrange
-            var mockId = 42;
-            var mockArticle = new Article { Title = "mock article" };
-            articlesRepoMock.Setup(repo => repo.GetOne(mockId)).Returns(Task.FromResult(mockArticle));
-
-            // Act
-            var result = await controller.Delete(mockId);
-
-            // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal(mockArticle, viewResult.ViewData.Model);
-        }
-
-        [Fact]
-        public async Task DeleteConfirmedTest_RemovesArticleFromRepository_AndRedirectsToIndex()
+        public async Task DeleteArticleTest_ReturnsSuccessCode_AfterRemovingArticleFromRepository()
         {
             // Arrange
             var mockId = 42;
@@ -215,12 +166,11 @@ namespace BlogPlayground.Test
             articlesRepoMock.Setup(repo => repo.SaveChanges()).Returns(Task.CompletedTask);
 
             // Act
-            var result = await controller.DeleteConfirmed(mockId);
+            var result = await controller.DeleteArticle(mockId);
 
             // Assert
             articlesRepoMock.Verify(repo => repo.Remove(mockArticle));
-            var viewResult = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Equal("Index", viewResult.ActionName);
+            Assert.IsType<NoContentResult>(result);            
         }
     }
 }

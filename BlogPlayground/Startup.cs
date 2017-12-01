@@ -43,7 +43,9 @@ namespace BlogPlayground
                     options.ClientSecret = Configuration["GoogleClientSecret"] ?? "MissingClientSecret";
                     options.SaveTokens = true; // So we get the access token and can use it later to retrieve the user profile including its picture
                     //options.CallbackPath = "/signin-google" DEFAULT VALUE
-                }); 
+                });
+
+            services.AddAntiforgery(opts => opts.HeaderName = "XSRF-TOKEN");
 
             services.AddMvc();
             services.AddResponseCompression();
