@@ -17,7 +17,7 @@ namespace BlogPlayground.Data
         }
 
         public Task<List<Article>> GetAll() =>
-            _context.Article.Include(a => a.Author).ToListAsync();
+            _context.Article.Include(a => a.Author).OrderByDescending(a => a.CreatedDate).ToListAsync();
 
         public Task<List<Article>> GetLatest(int num) =>
             _context.Article.Include(a => a.Author).OrderByDescending(a => a.CreatedDate).Take(num).ToListAsync();

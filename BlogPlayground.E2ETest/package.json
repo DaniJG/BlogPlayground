@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "name": "blogplayground.e2etest",
+  "private": true,
+  "scripts": {
+    "test:chrome": "nightwatch --config ./nightwatch.config.js --env chrome",
+    "test:edge": "nightwatch --config ./nightwatch.config.js --env edge"
+  },
+  "devDependencies": {
+    "nightwatch": "0.9.19",
+    "selenium-server-standalone-jar": "3.8.1"
+  }
+}

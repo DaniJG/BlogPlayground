@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogPlayground.Test", "Blog
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogPlayground.IntegrationTest", "BlogPlayground.IntegrationTest\BlogPlayground.IntegrationTest.csproj", "{AA518DB8-5510-4C6A-B326-A119E72871AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogPlayground.E2ETest", "BlogPlayground.E2ETest\BlogPlayground.E2ETest.csproj", "{1E5151B3-87F3-4843-BE91-1F637279197E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{AA518DB8-5510-4C6A-B326-A119E72871AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA518DB8-5510-4C6A-B326-A119E72871AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA518DB8-5510-4C6A-B326-A119E72871AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E5151B3-87F3-4843-BE91-1F637279197E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E5151B3-87F3-4843-BE91-1F637279197E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E5151B3-87F3-4843-BE91-1F637279197E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E5151B3-87F3-4843-BE91-1F637279197E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
